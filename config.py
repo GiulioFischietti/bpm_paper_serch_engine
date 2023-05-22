@@ -14,6 +14,8 @@ MAX_SENTENCE_LENGTH = 100
 QDRANT_HOST = os.getenv("QDRANT_HOST")
 QDRANT_PORT = os.getenv("QDRANT_PORT")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+HOSTNAME = os.getenv("HOST_NAME")
+HOSTPORT = os.getenv("PORT")
 COLLECTION_NAME = "papers"
 
 # OpenAI
