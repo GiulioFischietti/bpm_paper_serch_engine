@@ -1,15 +1,20 @@
 <script lang="ts">
   import { page } from "$app/stores"
   import { goto } from "$app/navigation"
-  import Conditionalwrapper from "../components/conditionalwrapper.svelte";
   import DuckIcon from "../assets/main-icon.ico"
+  import AudioQuack from "../assets/quack.mp3"
   
   let input: HTMLInputElement;
   let queryString: string = "";
-  
+  const quack = typeof Audio !== "undefined" && new Audio(AudioQuack);
+ 
   const enterPressed = () => {
-    queryString = encodeURIComponent(queryString ?? "");
-    goto(`/paperselect?query=${queryString}`);
+    const resultQueryString = encodeURIComponent(queryString ?? "");
+    goto(`/paperselect?query=${resultQueryString}`);
+  }
+
+  const buildSummary = () => {
+    quack && quack.play();
   }
 
   const focusInput = () => {
@@ -30,27 +35,41 @@
     place-items: center;
     place-content: center;
     gap: 4rem;
+    transition: all .4s;
   }
   .inputwrapper{
     padding: 1rem;
     border-radius: 4rem;
-    border: 2px solid black;
+    border: 2px solid rgb(77, 0, 100);
     display: flex; 
     justify-content: center;
     align-items: center;
     cursor: text;
+    background: white;
   }
   .inputwrapper > input {
     width: 100%;
     outline: none;
     border: none;
-    pointer-events: none;
+    background: none;
   }
   .inputwrapper > div{
     font-size: larger;
   }
   .landing > .inputwrapper{
     width: 50%;
+    box-shadow: 0px 0px 49px -3px rgb(44, 44, 44);
+  }
+  .landing > .iconContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .landing > .iconContainer > p{
+    font-size: 24px;
+    font-weight: 900;
+    margin: 0;
   }
   .navbar{
     position: fixed;
@@ -61,21 +80,41 @@
     top: 0;
     width: 100%;
     height: 5rem;
+    transition: all .4s;
   }
-  .navbar > img{
-    width: 2.5rem;
-    height: 2.5rem;
+  .navbar > .iconContainer{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  
+    bottom: 2rem;
+    right: 2rem;
+    cursor: pointer;
+    z-index: 12;
+  }
+  .navbar > .inputwrapper{
+    width: 45%;
+    box-shadow: 0px 0px 49px -3px rgb(44, 44, 44);
+  }
+  .navbar > .iconContainer > img{
+    width: 4rem;
+    height: 4rem;
+    gap: 0px;
+  }
+  .navbar > .iconContainer > p{
+    font-weight: bolder;
+    margin: 0;
+    pointer-events: none;
   }
 </style>
 
+<slot></slot>
 <div class:landing={isLandingPage} class:navbar={!isLandingPage}>
-  {#if isLandingPage}
-  <div style="display: flex; flex-direction: column; justify-content:center; align-items: center">
-    <img src={DuckIcon} alt="PaperAI">
-    <h1>PaperAI</h1>
+  <div class="iconContainer">
+    <img src={DuckIcon} alt="PaperAI" on:click={!isLandingPage ? () => buildSummary() : ()=>{}} on:keypress>
+    <p>{isLandingPage ? "PaperAI" : "Build Summary"}</p>
   </div>
-  {/if}
-  <Conditionalwrapper condition={!isLandingPage}>
   <div class="inputwrapper" on:click={() => focusInput()} on:keypress>
     <input 
       type="text" 
@@ -85,10 +124,4 @@
       on:keypress={(event) => event.key === "Enter" && enterPressed()}>
       <div style="cursor: pointer;" on:click={() => enterPressed()} on:keypress>🔍</div>
   </div>
-  </Conditionalwrapper>
-  {#if !isLandingPage}
-    <img src={DuckIcon} alt="PaperAI">
-  {/if}
 </div>
-
-<slot></slot>
