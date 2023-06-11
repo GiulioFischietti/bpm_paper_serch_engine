@@ -48,7 +48,6 @@
   }
   .inputwrapper > div{
     font-size: larger;
-    pointer-events: none;
   }
   .landing > .inputwrapper{
     width: 50%;
@@ -84,7 +83,7 @@
       bind:value={queryString} 
       bind:this={input}
       on:keypress={(event) => event.key === "Enter" && enterPressed()}>
-      <div>🔍</div>
+      <div style="cursor: pointer;" on:click={() => enterPressed()} on:keypress>🔍</div>
   </div>
   </Conditionalwrapper>
   {#if !isLandingPage}
