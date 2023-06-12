@@ -36,6 +36,7 @@
       }
     };
 
+    handlePopState();
     window.addEventListener("popstate", handlePopState);
 
     return () => {

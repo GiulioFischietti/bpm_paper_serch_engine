@@ -10,6 +10,16 @@
   $: queryString = $urlString?.searchParams?.get("query") ?? "";
 
   let currentList: CardContent[] = [];
+  let selectedList: string[] = [];
+
+  const cardSelect = (l: string) => {
+    selectedList.push(l);
+    console.log(selectedList);
+  };
+  const cardDeselect = (l: string) => {
+    selectedList = selectedList.filter((sl) => sl !== l);
+    console.log(selectedList);
+  };
 
   const getList = async (query: string, page: number): Promise<CardContent[]> => {
     /**@todo: add GET with pagination and find a way to re-trigger this function on href change */
@@ -25,7 +35,12 @@
     <Rollerloader />
   {:then results}
     {#each results as result}
-      <Card {...result} />
+      <Card
+        {...result}
+        onSelectCallback={cardSelect}
+        onDeselectCallback={cardDeselect}
+        initialSelected={selectedList.includes(result.link)}
+      />
     {/each}
   {:catch error}
     <h1 style="color: red;">
@@ -65,11 +80,11 @@
     gap: 2rem;
     height: calc(100vh - var(--navbar-heigth) - 0.5rem);
     margin-left: 2rem;
-    margin-right: 1.5rem;
+    margin-right: 3rem;
     overflow: hidden;
     overflow-y: auto;
     height: 470px;
-    column-gap: 5rem;
+    column-gap: 2rem;
   }
   .footer {
     position: fixed;
