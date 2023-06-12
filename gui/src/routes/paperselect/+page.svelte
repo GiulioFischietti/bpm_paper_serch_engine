@@ -13,7 +13,6 @@
 
   const getList = async (query: string, page: number): Promise<CardContent[]> => {
     /**@todo: add GET with pagination and find a way to re-trigger this function on href change */
-    console.log("entro qui", { query, page });
     const startIndex = page >= 0 ? page * 6 : 0;
     documentResults.forEach((d) => (d.title = query));
     currentList = documentResults.filter((d) => true).slice(startIndex, startIndex + 6);
@@ -22,7 +21,7 @@
 </script>
 
 <div class="cardsContainer">
-  {#await getList(queryString, currentPage)}
+  {#await getList(decodeURIComponent(queryString), currentPage)}
     <Rollerloader />
   {:then results}
     {#each results as result}

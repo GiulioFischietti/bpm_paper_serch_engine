@@ -31,7 +31,7 @@
     const handlePopState = () => {
       const urlState = new URL(window.location.href);
       if (urlState.pathname === "/paperselect") {
-        input.value = urlState?.searchParams?.get("query") ?? "";
+        input.value = decodeURIComponent(urlState?.searchParams?.get("query") ?? "");
         urlString.set(urlState);
       }
     };
