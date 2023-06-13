@@ -10,20 +10,20 @@
   $: selected = initialSelected ?? false;
 
   const modifyStatus = (value: string) => {
+    console.log("entro qui");
     selected = !selected;
     selected && onSelectCallback(value);
     !selected && onDeselectCallback(value);
   };
 </script>
 
-<div bind:this={root} class:active={selected} class:card={!selected}>
+<div bind:this={root} class:active={selected} class:card={!selected} on:click={() => modifyStatus(link)} on:keypress>
   <h2><a href={link} target="_blank">{title}</a></h2>
   <p>{description}</p>
   <input
     type="checkbox"
     value={link}
-    on:change={() => modifyStatus(link)}
-    checked={initialSelected}
+    checked={selected}
   />
 </div>
 
@@ -37,6 +37,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     transition: all 0.4s;
+    cursor: pointer;
   }
   h2 {
     margin-left: 2rem;
@@ -62,5 +63,6 @@
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     transition: all 0.4s;
+    cursor: pointer;
   }
 </style>

@@ -3,6 +3,7 @@
   import type { CardContent } from "../../models/models";
   import Rollerloader from "../../components/rollerloader.svelte";
   import DuckNavigation from "../../assets/duck_navigation.png";
+  import DisabledNavigation from "../../assets/duck_navigation_disabled.png";
   import Card from "../../components/card.svelte";
   import { urlString } from "../../store";
 
@@ -52,19 +53,21 @@
 </div>
 <div class="footer">
   <img
-    src={DuckNavigation}
+    src={currentPage > 0 ? DuckNavigation : DisabledNavigation}
     alt="Prev Page"
     height="48px"
     on:click={currentPage > 0 ? () => currentPage-- : () => {}}
     on:keypress
+    class:disabled={currentPage <= 0}
   />
   {currentPage}
   <img
-    src={DuckNavigation}
+    src={currentList.length > 0 ? DuckNavigation : DisabledNavigation}
     alt="Next Page"
     height="48px"
     on:click={currentList.length > 0 ? () => currentPage++ : () => {}}
     on:keypress
+    class:disabled={currentList.length <= 0}
   />
 </div>
 
@@ -72,6 +75,9 @@
   :root {
     --navbar-heigth: 7rem;
     --footbar-height: 3rem;
+  }
+  .disabled{
+    pointer-events: none;
   }
   .cardsContainer {
     margin-top: var(--navbar-heigth);
