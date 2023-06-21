@@ -6,7 +6,7 @@ name: Python application
 on:
   push:
     branches: [ "main" ]
-    paths: ["server/**", "environment.yml", ".env"]
+    paths: ["server/**", "environment.yml", ".env", "requirements.txt"]
     
 permissions:
   contents: read
