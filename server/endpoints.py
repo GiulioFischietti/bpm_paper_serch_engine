@@ -44,4 +44,5 @@ def get_search(query: str, page: int):
 
 @app.get("/summary")
 def get_summary(links:list[str]):
+  print("Hellooo")
   return JSONResponse(jsonable_encoder(ErrorScheme("frek't", HTTPStatus.BAD_REQUEST)))
