@@ -29,7 +29,7 @@ def get_search(query: str, page: int):
   })
 
   '''
-    prompt = "You have been asked: " + query + " by a phd. Provide a 800-1000 word answer with introduction, discussion and conclusions considering the following pieces of articles found on sciencedirect, considering that some of them may belong to the same article or be of the same topic and mentioning them if necessary like this: [0], [1] and so on:\n" 
+    prompt = "You have been asked: " + query + " by a phd.  Provide a 800-1000 word answer with introduction, discussion and conclusions considering the following pieces of articles found on sciencedirect, considering that some of them may belong to the same article or be of the same topic and mentioning them if necessary like this: [0], [1] and so on:\n" 
     for idx, doc in enumerate(parsings):
       prompt += f'{idx}. title: "{doc["title"]}" {doc["abstract"]}\n'
       continue
