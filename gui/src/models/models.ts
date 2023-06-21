@@ -1,7 +1,9 @@
 type CardContent = {
   title: string;
-  description: string;
+  summary: string;
   link: string;
+  date: string;
+  authors: string[];
 };
 
 export type { CardContent };

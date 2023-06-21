@@ -21,3 +21,6 @@ COLLECTION_NAME = "papers"
 # OpenAI
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_FREE_URL = os.getenv("OPENAI_FREE_URL")
+
+# Server
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS")

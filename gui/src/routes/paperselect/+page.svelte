@@ -1,32 +1,41 @@
 <script lang="ts">
-  import { documentResults } from "../../assets/mockups";
   import type { CardContent } from "../../models/models";
   import Rollerloader from "../../components/rollerloader.svelte";
   import DuckNavigation from "../../assets/duck_navigation.png";
   import DisabledNavigation from "../../assets/duck_navigation_disabled.png";
   import Card from "../../components/card.svelte";
   import { urlString } from "../../store";
-
+  
   $: currentPage = 0;
   $: queryString = $urlString?.searchParams?.get("query") ?? "";
-
+  
   let currentList: CardContent[] = [];
-  let selectedList: string[] = [];
+  const initialList: string[] = [];
 
-  const cardSelect = (l: string) => {
-    selectedList.push(l);
-    console.log(selectedList);
+  $: selectedList = initialList;
+
+  export let data: {pyApi: string};
+
+  const cardSelect = (l: string): boolean => {
+    if(selectedList.length >= 4) return false;
+    selectedList = selectedList.concat(l);
+    return true;
   };
-  const cardDeselect = (l: string) => {
+  const cardDeselect = (l: string)=> {
     selectedList = selectedList.filter((sl) => sl !== l);
-    console.log(selectedList);
   };
 
   const getList = async (query: string, page: number): Promise<CardContent[]> => {
-    /**@todo: add GET with pagination and find a way to re-trigger this function on href change */
-    const startIndex = page >= 0 ? page * 6 : 0;
-    documentResults.forEach((d) => (d.title = query));
-    currentList = documentResults.filter((d) => true).slice(startIndex, startIndex + 6);
+    const response: CardContent[] = await (
+      await fetch(`${data.pyApi}/search?query=${query}&page=${page}`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          accept: "application/json",
+        },
+      })
+    ).json();
+    currentList = response.map(l => l);
     return currentList;
   };
 </script>
@@ -70,11 +79,18 @@
     class:disabled={currentList.length <= 0}
   />
 </div>
+<div class="counter">Selected: {selectedList.length}/4</div>
 
 <style>
   :root {
     --navbar-heigth: 7rem;
     --footbar-height: 3rem;
+  }
+  .counter{
+    position: fixed;
+    bottom: 1.3%;
+    right: 3.4%;
+    font-size: 11px;
   }
   .disabled{
     pointer-events: none;

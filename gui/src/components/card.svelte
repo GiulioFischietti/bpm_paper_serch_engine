@@ -1,52 +1,89 @@
 <script lang="ts">
   export let title: string;
-  export let description: string;
+  export let summary: string;
   export let link: string;
-  export let onSelectCallback: (l: string) => void;
+  export let date: string;
+  export let authors: string[];
+  export let onSelectCallback: (l: string) => boolean;
   export let onDeselectCallback: (l: string) => void;
   export let initialSelected: boolean | undefined = undefined;
 
-  let root: HTMLDivElement;
+  let formattedDate: any = new Date(date);
+  formattedDate = `${formattedDate.getDate()}-${formattedDate.getMonth()}-${formattedDate.getFullYear()}`
+
   $: selected = initialSelected ?? false;
 
   const modifyStatus = (value: string) => {
-    console.log("entro qui");
-    selected = !selected;
-    selected && onSelectCallback(value);
+    const isSelected = !selected && onSelectCallback(value);
+    selected = isSelected;
     !selected && onDeselectCallback(value);
   };
 </script>
 
-<div bind:this={root} class:active={selected} class:card={!selected} on:click={() => modifyStatus(link)} on:keypress>
-  <h2><a href={link} target="_blank">{title}</a></h2>
-  <p>{description}</p>
+<div class="card" class:active={selected} class:inactive={!selected}>
+  <div class="date">{formattedDate}</div>
+  <h2>
+    <a href={link} target="_blank">{title}</a>
+    [{authors.join(", ")}]
+  </h2>
+  <div class="summaryContainer">
+    <div on:click={() => modifyStatus(link)} on:keypress class="overlay"></div>
+    {summary}
+  </div>
   <input
-    type="checkbox"
-    value={link}
-    checked={selected}
+  type="checkbox"
+  value={link}
+  checked={selected}
+  on:change={() => modifyStatus(link)}
   />
 </div>
 
 <style>
+  .date{
+    position: absolute;
+    top: 6px;
+    text-align: center;
+    width: 100%;
+  }
+  .overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  .summaryContainer{
+    position: relative;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    font-size: 13px;
+    height: 100%;
+  }
   .card {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: rgba(128, 128, 128, 0.5);
-    backdrop-filter: blur(5px);
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  .inactive {
+    background-color: rgba(128, 128, 128, 0.8);
+    box-shadow: 0px 0px 36px -5px rgba(0,0,0,0.4);
     transition: all 0.4s;
-    cursor: pointer;
   }
   h2 {
     margin-left: 2rem;
     margin-right: 2rem;
+    margin-top: 1.8rem;
+    font-weight: normal;
+    font-size: 10px;
   }
-  p {
-    margin-left: 2rem;
-    margin-right: 2rem;
+  h2 > a{
+    font-weight: bold;
+    font-size: large;
   }
+
   input {
     position: absolute;
     top: 0.5rem;
@@ -55,14 +92,8 @@
     height: 15px;
   }
   .active {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(69, 183, 82, 0.5);
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    background-color: rgba(69, 183, 82, 0.8);
+    box-shadow: 0px 0px 36px -5px rgba(69, 183, 82,0.4);
     transition: all 0.4s;
-    cursor: pointer;
   }
 </style>
