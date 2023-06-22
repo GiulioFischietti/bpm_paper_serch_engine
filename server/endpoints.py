@@ -15,7 +15,7 @@ import requests
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS)
 
-@app.get("/searchpapers")
+@app.get("/searchpapersasd")
 def get_search(query: str, page: int):
   # from qdrant: link -> get by link from MongoDB ["title", "link", "summary"]
   encoded_query = transformer.encode(query)
