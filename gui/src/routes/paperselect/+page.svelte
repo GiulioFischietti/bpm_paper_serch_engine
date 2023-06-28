@@ -8,11 +8,17 @@
   export let data;
   const quack = typeof Audio !== "undefined" && new Audio(QuackAudio);
 
+  let cardsContainer: HTMLDivElement;
   let currentList: CardContent[] = data.responseData;
+  let oldResponse: CardContent[] = data.responseData;
   let isLoading: boolean = false;
   let currentPage: number = 0;
   $:currentList
   $:isLoading
+  $:if(data.responseData !== oldResponse){
+    currentList = data.responseData;
+    cardsContainer.scrollTop = 0;
+  }
 
   const handleSelect = (link: string) => {
     if($selectedLinks.length === 4) {
@@ -61,7 +67,7 @@
 
 </script>
 
-<div class="cardsContainer" on:scroll={checkScrollEnd}>
+<div class="cardsContainer" on:scroll={checkScrollEnd} bind:this={cardsContainer}>
   {#each currentList as paper}
     <Card {...paper} onSelectCallback={handleSelect} onDeselectCallback={handleDeselect} />
   {/each}
