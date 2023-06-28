@@ -3,7 +3,7 @@
   import { goto } from "$app/navigation";
   import DuckIcon from "../assets/main-icon.ico";
   import AudioQuack from "../assets/quack.mp3";
-  import { urlString } from "../store";
+  import { urlString, selectedLinks, quackSays } from "../store";
   import { onMount } from "svelte";
 
   let input: HTMLInputElement;
@@ -20,7 +20,11 @@
   };
 
   const buildSummary = () => {
-    quack && quack.play();
+    if($selectedLinks.length === 0 && $quackSays === ""){
+      quack && quack.play();
+      $quackSays = "select some papers"
+      setTimeout(() => $quackSays = "", 3000)
+    }
   };
 
   const focusInput = () => {
@@ -55,8 +59,11 @@
       alt="PaperAI"
       on:click={!isLandingPage ? () => buildSummary() : () => {}}
       on:keypress
-    />
-    <p>{isLandingPage ? "PaperAI" : "Build Summary"}</p>
+      />
+      <p>{isLandingPage ? "PaperAI" : "Build Summary"}</p>
+      {#if !isLandingPage && $quackSays !== ""}
+        <div class="message">{$quackSays}</div>
+      {/if}
   </div>
   <div class="inputwrapper" on:click={() => focusInput()} on:keypress>
     <input
@@ -132,7 +139,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    bottom: 2rem;
+    top: 0.5rem;
     right: 2rem;
     cursor: pointer;
     z-index: 12;
@@ -150,5 +157,43 @@
     font-weight: bolder;
     margin: 0;
     pointer-events: none;
+  }
+  .message{
+    position: absolute;
+    opacity: 0;
+    max-width: 100%;
+    height: 49%;
+    left: -68%;
+    background: rgba(128, 128, 128, 0.8);
+    box-shadow: 0px 0px 36px -5px rgba(0,0,0,0.4);
+    animation: fadein .2s ease-in-out forwards;
+    border-radius: 3rem;
+    text-align: center;
+    padding: .1rem;
+    font-size: smaller;
+  }
+  @keyframes fadein {
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+  @media screen and (max-width: 500px){
+    .navbar > .iconContainer{
+      top: 1.5rem;
+      right: 0.5rem;
+    }
+    .navbar > .iconContainer > p {
+      font-size: smaller;
+    }
+    .navbar > .iconContainer > img {
+      width: 2rem;
+      height: 2rem;
+    }
+    .navbar{
+      justify-content: start;
+    }
   }
 </style>

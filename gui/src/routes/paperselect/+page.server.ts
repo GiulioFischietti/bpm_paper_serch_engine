@@ -1,6 +1,15 @@
 import { env } from "$env/dynamic/private";
-import type { PageServerLoad } from "./$types.js";
 
-export function load(): PageServerLoad {
-  return JSON.parse(`{ "pyApi": "${env.PYTHON_APIS}" }`);
+export async function load({ url }) {
+  const host = env.PYTHON_APIS;
+  const query = url.searchParams?.get("query") ?? "";
+  const responseData = await (
+    await fetch(`${host}/search?query=${query}&page=${0}`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+  ).json();
+  return { responseData, host, query };
 }

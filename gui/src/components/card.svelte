@@ -59,7 +59,6 @@
     margin-right: 2rem;
     margin-top: 2rem;
     font-size: 13px;
-    height: 100%;
   }
   .card {
     position: relative;
