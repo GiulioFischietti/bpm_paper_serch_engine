@@ -16,6 +16,7 @@
     currentUrl.pathname = "/paperselect";
     currentUrl.searchParams.set("query", resultQueryString);
     urlString.set(new URL(currentUrl));
+    $selectedLinks = [];
     goto(currentUrl);
   };
 
@@ -24,7 +25,15 @@
       quack && quack.play();
       $quackSays = "select some papers"
       setTimeout(() => $quackSays = "", 3000)
+      return;
     }
+    if($page.url.pathname === "/summary"){
+      quack && quack.play();
+      $quackSays = "issues? Try to select different papers!"
+      setTimeout(() => $quackSays = "", 3000)
+      return;
+    }
+    goto("/summary");
   };
 
   const focusInput = () => {
@@ -36,6 +45,7 @@
       const urlState = new URL(window.location.href);
       if (urlState.pathname === "/paperselect") {
         input.value = decodeURIComponent(urlState?.searchParams?.get("query") ?? "");
+        queryString = input.value;
         urlString.set(urlState);
       }
     };
@@ -44,15 +54,17 @@
     window.addEventListener("popstate", handlePopState);
 
     return () => {
-      window.removeEventListener("popstate", () => {});
+      window.removeEventListener("popstate", handlePopState);
     };
   });
 
   $: isLandingPage = $page.url.pathname === "/";
+  $: isSummary = $page.url.pathname === "/summary";
 </script>
 
 <slot />
 <div class:landing={isLandingPage} class:navbar={!isLandingPage}>
+  {#if !isSummary}
   <div class="iconContainer">
     <img
       src={DuckIcon}
@@ -65,6 +77,7 @@
         <div class="message">{$quackSays}</div>
       {/if}
   </div>
+  {/if}
   <div class="inputwrapper" on:click={() => focusInput()} on:keypress>
     <input
       type="text"
@@ -162,7 +175,6 @@
     position: absolute;
     opacity: 0;
     max-width: 100%;
-    height: 49%;
     left: -68%;
     background: rgba(128, 128, 128, 0.8);
     box-shadow: 0px 0px 36px -5px rgba(0,0,0,0.4);
@@ -171,6 +183,7 @@
     text-align: center;
     padding: .1rem;
     font-size: smaller;
+    backdrop-filter: blur(5px);
   }
   @keyframes fadein {
     0%{

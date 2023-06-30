@@ -36,3 +36,6 @@ class ErrorScheme():
   
   def dict(self):
     return {k: str(v) for k,v in asdict(self).items()}
+  
+class SummaryBody(BaseModel):
+  links: list[str]

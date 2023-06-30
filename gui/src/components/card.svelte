@@ -1,4 +1,6 @@
 <script lang="ts">
+  import {selectedLinks} from "../store"
+
   export let title: string;
   export let summary: string;
   export let link: string;
@@ -10,7 +12,7 @@
 
   let formattedDate: any = new Date(date);
   formattedDate = `${formattedDate.getDate()}-${formattedDate.getMonth()}-${formattedDate.getFullYear()}`
-
+  
   $: selected = initialSelected ?? false;
 
   const modifyStatus = (value: string) => {
@@ -34,6 +36,7 @@
   type="checkbox"
   value={link}
   checked={selected}
+  disabled={$selectedLinks.length === 4}
   on:change={() => modifyStatus(link)}
   />
 </div>

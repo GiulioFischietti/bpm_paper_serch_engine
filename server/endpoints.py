@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from http import HTTPStatus
-from schemes import ErrorScheme, SearchResponse
+from schemes import ErrorScheme, SearchResponse, SummaryBody
 from access_points import qdrand_client, mongo_articles, transformer
 from config import OPENAI_API_KEY, OPENAI_FREE_URL, ALLOWED_ORIGINS
 from openai import ChatCompletion
@@ -14,7 +14,7 @@ import requests
 
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS)
+app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_methods=["*"])
 
 @app.get("/search")
 def get_search(query: str, page: int):
@@ -41,12 +41,14 @@ def get_search(query: str, page: int):
     else JSONResponse(jsonable_encoder(final_response))
 
 @app.put("/summary")
-def get_summary(links:list[str]):
+def get_summary(body: SummaryBody):
+  links = body.links
   parsings = mongo_articles.find({
     "link":{
       "$in": links
     }
   })
+  results = list(parsings)
 
   # TODO: request to openAI for the response
   '''
@@ -57,17 +59,21 @@ def get_summary(links:list[str]):
   '''
   
   section_text = ""
-  emptyStack = True
+  empty_stack = True
   for section in ["introduction", "discussion", "conclusions"]:
-    section_text = f"<h2>{section.upper()}<h2>"
-    section_text+="<p>"
-    for idx, doc in enumerate(parsings):
-      emptyStack = False
+    section_text += f"<h2>{section.upper()}</h2>"
+    section_text +='<p>'
+    for idx, doc in enumerate(results):
+      empty_stack = False
       if section == "introduction" and idx == 0:
         section_text = f'<h1>{doc["title"]}</h1>'
-      section_text += doc["abstract"][:30] if section == "introduction" else\
-        doc["body"][:100] if section == "discussion" else doc["conclusions"][:30]
-      section_text += f'<a href={doc["link"]}>[{idx}]</a>'
+      section_text += doc["abstract"][:1000] if section == "introduction" else\
+        doc["body"][:3000] if section == "discussion" else doc["body"][len(doc["body"])-1001:len(doc["body"])-1001+1000]
+      section_text += f'<a href={doc["link"]} target="_blank">[{idx}]</a>'
     section_text+="</p>"
+  
+  section_text += "<h2>REFERENCES</h2>"
+  for idx, doc in enumerate(results):
+    section_text += f'<p><a href={doc["link"]}>{doc["title"]}</a></p>'    
 
-  return section_text if not emptyStack else jsonable_encoder(ErrorScheme("frek't", HTTPStatus.BAD_REQUEST))
+  return section_text if not empty_stack else jsonable_encoder(ErrorScheme("No results found, the issue may be caused by an unwanted page reload, reloading the page in this stage of the application may cause a wrong format for the request", HTTPStatus.BAD_REQUEST))

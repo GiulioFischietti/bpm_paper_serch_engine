@@ -69,7 +69,12 @@
 
 <div class="cardsContainer" on:scroll={checkScrollEnd} bind:this={cardsContainer}>
   {#each currentList as paper}
-    <Card {...paper} onSelectCallback={handleSelect} onDeselectCallback={handleDeselect} />
+    <Card 
+      {...paper} 
+      onSelectCallback={handleSelect} 
+      onDeselectCallback={handleDeselect} 
+      initialSelected={$selectedLinks.includes(paper.link)} 
+    />
   {/each}
   {#if isLoading}
     <RollerLoader />    
