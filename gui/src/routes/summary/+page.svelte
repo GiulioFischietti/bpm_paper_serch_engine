@@ -16,7 +16,7 @@
     const response = await (await fetch(`${data.host}/summary`, {
       method: "PUT",
       // @ts-ignore
-      body: JSON.stringify({links: $selectedLinks}),
+      body: JSON.stringify({links: $selectedLinks, query: data.queryString}),
       headers:{
         "content-type": "application/json"
       }

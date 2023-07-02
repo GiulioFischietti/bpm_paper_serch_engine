@@ -43,6 +43,7 @@ def get_search(query: str, page: int):
 @app.put("/summary")
 def get_summary(body: SummaryBody):
   links = body.links
+  print(body.query)
   parsings = mongo_articles.find({
     "link":{
       "$in": links

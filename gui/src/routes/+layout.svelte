@@ -33,7 +33,12 @@
       setTimeout(() => $quackSays = "", 3000)
       return;
     }
-    goto("/summary");
+    const resultQueryString = encodeURIComponent(queryString ?? "");
+    const currentUrl = new URL(window.location.href);
+    currentUrl.pathname = "/summary";
+    currentUrl.searchParams.set("query", resultQueryString);
+    urlString.set(new URL(currentUrl));
+    goto(currentUrl);
   };
 
   const focusInput = () => {
@@ -43,7 +48,7 @@
   onMount(() => {
     const handlePopState = () => {
       const urlState = new URL(window.location.href);
-      if (urlState.pathname === "/paperselect") {
+      if (urlState.pathname === "/paperselect" || urlState.pathname === "/summary") {
         input.value = decodeURIComponent(urlState?.searchParams?.get("query") ?? "");
         queryString = input.value;
         urlString.set(urlState);

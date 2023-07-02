@@ -39,3 +39,4 @@ class ErrorScheme():
   
 class SummaryBody(BaseModel):
   links: list[str]
+  query: str
