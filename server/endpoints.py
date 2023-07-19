@@ -6,22 +6,22 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from http import HTTPStatus
 from schemes import ErrorScheme, SearchResponse, SummaryBody
-from access_points import qdrand_client, mongo_articles, transformer
+from access_points import QdrantQueryThread, mongo_articles, encoder
+from logic import weighted_query
 from config import OPENAI_API_KEY, OPENAI_FREE_URL, ALLOWED_ORIGINS
 from openai import ChatCompletion
+from torch import squeeze
+import threading
 import json
 import requests
-
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_methods=["*"])
 
 @app.get("/search")
 def get_search(query: str, page: int):
-  # from qdrant: link -> get by link from MongoDB ["title", "link", "summary"]
-  encoded_query = transformer.encode(query)
-  links = qdrand_client.search(collection_name="papers_complete", query_vector=encoded_query, limit=6, offset=page*6)
-  links = [l.payload["link"] for l in links]
+
+  links = weighted_query(query=query, page=page)
 
   parsings = mongo_articles.find({
     "link":{
@@ -44,6 +44,7 @@ def get_search(query: str, page: int):
 def get_summary(body: SummaryBody):
   links = body.links
   query = body.query
+
   parsings = mongo_articles.find({
     "link":{
       "$in": links

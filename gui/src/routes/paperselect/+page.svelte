@@ -42,6 +42,7 @@
       isLoading = true;
       const responseData = await resultPromise;
       isLoading = false;
+      responseData.filter((rd) => !currentList.map(cl => cl.link).includes(rd.link))
       currentList = currentList.concat(...responseData);
       return;
     }
