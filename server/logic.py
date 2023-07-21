@@ -30,8 +30,8 @@ def clean_text(text):
     cleaned_text=" ".join([token.lemma_ for token in text_to_lemmatize])
     return cleaned_text
 
-def weighted_query(query, page, title_weight=0.8, summaries_weight=0.6):
-  query_embeddings = encoder.encode(clean_text(query))
+def weighted_query(query, page, title_weight=1, summaries_weight=0.6):
+  query_embeddings = encoder.encode(query)
 
   titles_query = QdrantQueryThread(collection_name="paper_titles", page=page, query_vector=query_embeddings)
   summaries_query = QdrantQueryThread(collection_name="paper_summaries", page=page, query_vector=query_embeddings)
