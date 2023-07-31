@@ -1,8 +1,9 @@
 from access_points import QdrantQueryThread, encoder
-import nltk
-import spacy
+from config import OPENAI_API_KEY, OPENAI_ORGANIZATION
 from torch import sum, clamp, Tensor
-
+import spacy
+import nltk
+import openai
 
 nltk.download('stopwords')
 from nltk.corpus import stopwords
@@ -53,3 +54,25 @@ def weighted_query(query, page, title_weight=1, summaries_weight=0.6):
   
   final_rank = sorted(final_rank.items(), key=lambda i: i[1], reverse=True)
   return [l[0] for l in final_rank]
+
+def single_query(query, page, collection_name="st_finetuned_papers"):
+  query_embeddings = encoder.encode(query)
+
+  simple_query = QdrantQueryThread(collection_name=collection_name, page=page, query_vector=query_embeddings)
+  simple_query.start()
+  payloads_response = simple_query.join()
+
+  return [doc.payload["link"] for doc in payloads_response]
+
+def openaiRequest(prompt: str) -> str:
+  response = openai.ChatCompletion.create(
+    api_key=OPENAI_API_KEY,
+    organization=OPENAI_ORGANIZATION,
+    model="gpt-3.5-turbo-16k",
+    messages=[{"role": "user", "content": prompt}],
+    max_tokens=8000,
+    temperature=0.8
+  )["choices"][0]["message"]["content"]
+  print(response)
+  return response
+
