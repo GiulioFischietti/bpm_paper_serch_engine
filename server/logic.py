@@ -55,7 +55,11 @@ def weighted_query(query, page, title_weight=1, summaries_weight=0.6):
   final_rank = sorted(final_rank.items(), key=lambda i: i[1], reverse=True)
   return [l[0] for l in final_rank]
 
-def single_query(query, page, collection_name="st_finetuned_papers"):
+def single_query(query, page, collection_name="st_finetuned_papers_abstract"):
+  '''
+  Title + Abstract: st_finetuned_papers_abstract (default)
+  Title + Summary: st_finetuned_papers_summary
+  '''
   query_embeddings = encoder.encode(query)
 
   simple_query = QdrantQueryThread(collection_name=collection_name, page=page, query_vector=query_embeddings)
