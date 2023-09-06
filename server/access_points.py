@@ -8,10 +8,9 @@ import torch
 qdrand_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT, api_key=QDRANT_API_KEY)
 mongo_client = MongoClient(f'mongodb://{HOSTNAME}:{27017}').get_database('scientific_articles')
 
-qdrant_papers = qdrand_client.get_collection(collection_name="papers")
 mongo_articles = mongo_client.get_collection('articles')
 
-encoder = SentenceTransformer('sentence-transformers/distilbert-base-nli-mean-tokens').to("cuda" if torch.cuda.is_available() else "cpu")
+encoder = SentenceTransformer('sentence-transformers/allenai-specter').to("cuda" if torch.cuda.is_available() else "cpu")
 encoder.eval()
 
 class QdrantQueryThread(Thread):

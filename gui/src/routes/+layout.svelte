@@ -21,10 +21,12 @@
   };
 
   const buildSummary = () => {
-    if($selectedLinks.length === 0 && $quackSays === ""){
-      quack && quack.play();
-      $quackSays = "select some papers"
-      setTimeout(() => $quackSays = "", 3000)
+    if($selectedLinks.length === 0){
+      if($quackSays === ""){
+        quack && quack.play();
+        $quackSays = "select some papers"
+        setTimeout(() => $quackSays = "", 3000)
+      }
       return;
     }
     if($page.url.pathname === "/summary"){
