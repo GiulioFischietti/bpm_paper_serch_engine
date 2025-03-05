@@ -15,7 +15,8 @@ With the rapid growth of scientific publications, researchers face challenges in
 - **Web Application Interface**: Provides a user-friendly interface for accessing search results and summaries.
 
 
-<img src="https://github.com/user-attachments/assets/30828b97-779e-4226-b936-4dc4c1d3884b" width="800" />
+<img src="https://github.com/user-attachments/assets/5dc56550-f3af-4cc6-b0ce-87b4972a555b" width="800" />
+
 
 ## Technologies Used
 
