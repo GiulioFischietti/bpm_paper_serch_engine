@@ -19,9 +19,12 @@ With the rapid growth of scientific publications, researchers face challenges in
 - **GPT-3.5 & BART**: For text summarization and content generation.
 - **Sentence Transformers**: For vector-based document retrieval and search.
 - **Python & Flask**: Backend API for handling user queries and AI interactions.
-- **React.js**: Frontend framework for a seamless user experience.
 - **Qdrant**: Vector database for efficient paper indexing and retrieval.
 - **Web Scraping**: Automated extraction of scientific papers.
+- **MongoDB**: NoSQL DB for articles storage.
+
+![image](https://github.com/user-attachments/assets/ae8fa1ed-7c2e-45ac-9b50-8e641e8d1738)
+
 
 ## Usage Guide
 1. Enter a research query in the search bar.
