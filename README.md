@@ -23,8 +23,7 @@ With the rapid growth of scientific publications, researchers face challenges in
 - **Web Scraping**: Automated extraction of scientific papers.
 - **MongoDB**: NoSQL DB for articles storage.
 
-![image](https://github.com/user-attachments/assets/ae8fa1ed-7c2e-45ac-9b50-8e641e8d1738)
-
+<img src="[image.png](https://github.com/user-attachments/assets/ae8fa1ed-7c2e-45ac-9b50-8e641e8d1738)" width="400" />
 
 ## Usage Guide
 1. Enter a research query in the search bar.
