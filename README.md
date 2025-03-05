@@ -14,6 +14,9 @@ With the rapid growth of scientific publications, researchers face challenges in
 - **Interactive Query System**: Allows users to input questions and receive AI-generated responses based on summarized papers.
 - **Web Application Interface**: Provides a user-friendly interface for accessing search results and summaries.
 
+
+<img src="https://github.com/user-attachments/assets/30828b97-779e-4226-b936-4dc4c1d3884b" width="400" />
+
 ## Technologies Used
 
 - **GPT-3.5 & BART**: For text summarization and content generation.
@@ -23,7 +26,7 @@ With the rapid growth of scientific publications, researchers face challenges in
 - **Web Scraping**: Automated extraction of scientific papers.
 - **MongoDB**: NoSQL DB for articles storage.
 
-<img src="[image.png](https://github.com/user-attachments/assets/ae8fa1ed-7c2e-45ac-9b50-8e641e8d1738)" width="400" />
+<img src="https://github.com/user-attachments/assets/ae8fa1ed-7c2e-45ac-9b50-8e641e8d1738" width="400" />
 
 ## Usage Guide
 1. Enter a research query in the search bar.
